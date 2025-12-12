@@ -74,8 +74,7 @@ const userSlice = createSlice({
 
     builder.addCase(addRecentCity.fulfilled, (state, action) => {
       state.loading = false;
-      state.userData?.recentlySearchedCities = action.payload;
-      s;
+      state.userData.recentlySearchedCities = action.payload;
     });
 
     builder.addCase(addRecentCity.rejected, (state, action) => {

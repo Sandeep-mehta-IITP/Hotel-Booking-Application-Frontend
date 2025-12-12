@@ -3,6 +3,7 @@ import userSlice from "./Slices/userSlice";
 import roomSlice from "./Slices/roomSlice";
 import hotelSlice from "./Slices/hotelSlice";
 import bookingSlice from "./Slices/bookingSlice"
+import uiSlice from "./Slices/uiSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     room: roomSlice,
     hotel: hotelSlice,
     booking: bookingSlice,
+    ui: uiSlice,
 
   },
   // middleware: (getDefaultMiddleware) =>

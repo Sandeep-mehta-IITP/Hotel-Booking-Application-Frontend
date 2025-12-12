@@ -16,10 +16,9 @@ export const registerHotel = createAsyncThunk(
       toast.success(response?.data?.message || "Hotel Registered Successfully");
       return response.data?.data;
     } catch (error) {
-      const message =
-        error?.response?.data?.message || "Failed to register hotel.";
-      console.error("Failed to register hotel:", message);
-      toast.error(message);
+    
+      console.error("Failed to register hotel:", error);
+      toast.error(error.userMessage || "Failed to register hotel.");
       return rejectWithValue(message);
     }
   }

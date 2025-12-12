@@ -8,18 +8,21 @@ export const useClerkToRedux = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isLoaded) return;
+    if (isLoaded && user) {
+      const combinedUser = {
+        id: user.id,
+        username: user.username || null,
+        email: user.primaryEmailAddress?.emailAddress || null,
+        imageUrl: user.imageUrl || null,
+        role: user.publicMetadata?.role || null,
+        isSignedIn,
+        recentlySearchedCities:
+          user.publicMetadata?.recentlySearchedCities || [],
+      };
 
-    if (isSignedIn) {
-      dispatch(
-        setClerkUser({
-          user,
-          isLoaded,
-          isSignedIn,
-        })
-      );
-    } else {
-      dispatch(clearClerkUser());
+      dispatch(setClerkUser(combinedUser));
     }
   }, [user, isLoaded, isSignedIn, dispatch]);
+
+  return null;
 };

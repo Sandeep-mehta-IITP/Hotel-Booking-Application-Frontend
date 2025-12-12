@@ -1,13 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  // UI States
   showHotelReg: false,
-
-  // Clerk User States
   user: null,
-  isLoaded: false,
-  isSignedIn: false,
 };
 
 const uiSlice = createSlice({
@@ -24,15 +19,11 @@ const uiSlice = createSlice({
 
     // Clerk User Reducers ------------
     setClerkUser: (state, action) => {
-      state.user = action.payload.user;
-      state.isLoaded = action.payload.isLoaded;
-      state.isSignedIn = action.payload.isSignedIn;
+      state.user = action.payload;
     },
 
     clearClerkUser: (state) => {
       state.user = null;
-      state.isLoaded = false;
-      state.isSignedIn = false;
     },
   },
 });

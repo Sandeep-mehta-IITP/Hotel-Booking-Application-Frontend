@@ -51,13 +51,11 @@ export const createRoom = createAsyncThunk(
           "Content-Type": "multipart/form-data",
         },
       });
-      toast.success("Room created successfully!");
       return response.data?.data;
     } catch (error) {
       const message =
         error?.response?.data?.message || "Failed to create room!";
       console.error("Failed to create room:", message);
-      toast.error(message);
       return rejectWithValue(message);
     }
   }

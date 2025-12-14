@@ -38,7 +38,7 @@ const Navbar = () => {
   const showHotelReg = useSelector((state) => state.ui.showHotelReg);
   const userData = useSelector((state) => state?.user?.userData);
 
-  console.log(" userData", userData);
+  //console.log(" userData", userData);
 
   const isOwner = userData?.role === "hotelOwner";
 

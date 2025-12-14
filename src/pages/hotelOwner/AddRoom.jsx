@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import Title from "../../components/Title";
 import { assets } from "../../assets/assets";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { createRoom } from "../../APP/Slices/roomSlice";
 
 const AddRoom = () => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
   const [images, setImages] = useState({
     1: null,
     2: null,
@@ -12,18 +18,70 @@ const AddRoom = () => {
 
   const [inputs, setInputs] = useState({
     roomType: "",
-    pricePerNight: 0,
+    pricePerNight: "",
     amenities: {
       "Free WiFi": false,
       "Free Breakfast": false,
-      "Room Servie": false,
+      "Room Service": false,
       "Mountain View": false,
       "Pool Access": false,
     },
   });
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      !inputs.roomType ||
+      inputs.pricePerNight <= 0 ||
+      !Object.values(images).some((img) => img)
+    ) {
+      toast.error("Please fill in all the details.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const formData = new FormData();
+      formData.append("roomType", inputs.roomType);
+      formData.append("pricePerNight", inputs.pricePerNight);
+
+      const amenities = Object.keys(inputs.amenities).filter(
+        (key) => inputs.amenities[key]
+      );
+      formData.append("amenities", JSON.stringify(amenities));
+
+      Object.values(images).forEach((img) => {
+        img && formData.append("images", img);
+      });
+
+      await dispatch(createRoom(formData)).unwrap();
+
+      toast.success("Room added successfully!");
+
+      setInputs({
+        roomType: "",
+        pricePerNight: "",
+        amenities: {
+          "Free WiFi": false,
+          "Free Breakfast": false,
+          "Room Service": false,
+          "Mountain View": false,
+          "Pool Access": false,
+        },
+      });
+
+      setImages({ 1: null, 2: null, 3: null, 4: null });
+    } catch (error) {
+      toast.error(error?.message || "Failed to add room");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <Title
         align="left"
         font="outfit"
@@ -83,7 +141,7 @@ const AddRoom = () => {
             className="border border-gray-300 mt-1 rounded p-2 w-24"
             value={inputs.pricePerNight}
             onChange={(e) =>
-              setInputs({ ...inputs, pricePerNight: e.target.value })
+              setInputs({ ...inputs, pricePerNight: Number(e.target.value) })
             }
           />
         </div>
@@ -98,22 +156,25 @@ const AddRoom = () => {
               type="checkbox"
               id={`amenities${index + 1}`}
               checked={inputs.amenities[amenity]}
-              onChange={() =>
-                setInputs({
-                  ...inputs,
+              onChange={(e) =>
+                setInputs((prev) => ({
+                  ...prev,
                   amenities: {
-                    ...inputs.amenities,
-                    [amenity]: !inputs.amenities[amenity],
+                    ...prev.amenities,
+                    [amenity]: e.target.checked,
                   },
-                })
+                }))
               }
             />
             <label htmlFor={`amenities${index + 1}`}> {amenity}</label>
           </div>
         ))}
       </div>
-      <button className="bg-primary text-white px-8 rounded mt-8 cursor-pointer">
-        Add Room
+      <button
+        disabled={loading}
+        className="bg-primary text-white px-8 rounded mt-8 cursor-pointer"
+      >
+        {loading ? "Adding..." : "Add Room"}
       </button>
     </form>
   );

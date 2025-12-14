@@ -5,6 +5,7 @@ import { useClerk, UserButton } from "@clerk/clerk-react";
 import { useSelector, useDispatch } from "react-redux";
 import { setShowHotelReg } from "../APP/Slices/uiSlice";
 
+
 const BookIcon = () => (
   <svg
     className="w-4 h-4 text-gray-700"
@@ -36,6 +37,8 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const showHotelReg = useSelector((state) => state.ui.showHotelReg);
   const userData = useSelector((state) => state?.user?.userData);
+
+  console.log(" userData", userData);
 
   const isOwner = userData?.role === "hotelOwner";
 
@@ -107,7 +110,9 @@ const Navbar = () => {
             className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${
               isScrolled ? "text-black" : "text-white"
             } transition-all`}
-            onClick={() => isOwner ? navigate("/owner") : handleOpenHotelReg()}
+            onClick={() =>
+              isOwner ? navigate("/owner") : handleOpenHotelReg()
+            }
           >
             {isOwner ? "Dashboard" : "List Your Hotel"}
           </button>
@@ -187,9 +192,11 @@ const Navbar = () => {
         {user && (
           <button
             className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all"
-            onClick={() => isOwner ? navigate("/owner") : handleOpenHotelReg()}
+            onClick={() =>
+              isOwner ? navigate("/owner") : handleOpenHotelReg()
+            }
           >
-           {isOwner ? "Dashboard" : "List Your Hotel"}
+            {isOwner ? "Dashboard" : "List Your Hotel"}
           </button>
         )}
 

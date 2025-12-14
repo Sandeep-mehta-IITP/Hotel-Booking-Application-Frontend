@@ -16,7 +16,8 @@ export const fetchUserData = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/users");
-      toast.success(response?.data?.message);
+      //console.log("fetch user data ", response?.data);
+
       return response?.data?.data;
     } catch (error) {
       const message = error.userMessage || "Fail to fetched userData!";
@@ -64,7 +65,6 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
-
 
     //Add Recent City
     builder.addCase(addRecentCity.pending, (state) => {

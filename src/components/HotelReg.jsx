@@ -3,6 +3,7 @@ import { assets, cities } from "../assets/assets";
 import { useSelector, useDispatch } from "react-redux";
 import { setShowHotelReg } from "../APP/Slices/uiSlice";
 import { registerHotel } from "../APP/Slices/hotelSlice";
+import { fetchUserData } from "../APP/Slices/userSlice";
 
 const HotelReg = () => {
   // const showHotelReg = useSelector((state) => state.ui.showHotelReg);
@@ -32,6 +33,7 @@ const HotelReg = () => {
 
     dispatch(registerHotel(formData)).then((res) => {
       if (res.type === "hotel/registerHotel/fulfilled") {
+        dispatch(fetchUserData())
         handleCloseHotelReg();
       }
     });

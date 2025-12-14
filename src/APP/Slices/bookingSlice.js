@@ -71,13 +71,11 @@ export const fetchHotelBookings = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get("/bookings/hotel");
-      toast.success(res?.data?.message || "Hotel bookings fetched");
       return res.data?.data;
     } catch (error) {
       const message =
         error?.response?.data?.message || "Failed to fetch hotel bookings";
       console.error("Failed to fetch hotel bookings:", message);
-      toast.error(message);
       return rejectWithValue(message);
     }
   }

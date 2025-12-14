@@ -1,9 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Title from "../../components/Title";
 import { assets, dashboardDummyData } from "../../assets/assets";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchHotelBookings } from "../../APP/Slices/bookingSlice";
 
 const Dashboard = () => {
-  const [dashboardData, setDashboardData] = useState(dashboardDummyData);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.ui.user);
+
+  const [dashboardData, setDashboardData] = useState({
+    bookings: [],
+    totalBookings: 0,
+    totalRevenue: 0,
+  });
+
+  useEffect(() => {
+      if (user) {
+        dispatch(fetchHotelBookings())
+          .unwrap()
+          .then((res) => {
+            // console.log("res", res);
+            setDashboardData(res);
+          });
+      }
+    }, [user]);
+  
+
   return (
     <div>
       <Title
@@ -37,7 +59,7 @@ const Dashboard = () => {
           <div className="flx flex-col sm:ml-4 font-medium">
             <p className="text-blue-500 text-lg">Total Revenue</p>
             <p className="text-neutral-400 text-base">
-              $ {dashboardData.totalRevenue}
+              {import.meta.env.VITE_CURRENCY} {dashboardData.totalRevenue}
             </p>
           </div>
         </div>
@@ -75,7 +97,7 @@ const Dashboard = () => {
                 </td>
 
                 <td className="py-3 px-4 text-gray-700 border-t border-gray-300 text-center">
-                  $ {item.totalPrice}
+                  {import.meta.env.VITE_CURRENCY} {item.totalPrice}
                 </td>
 
                 <td className="py-3 px-4 text-gray-700 border-t border-gray-300 flex">

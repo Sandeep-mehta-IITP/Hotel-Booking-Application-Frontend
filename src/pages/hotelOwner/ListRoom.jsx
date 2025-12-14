@@ -1,9 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { roomsDummyData } from "../../assets/assets";
 import Title from "../../components/Title";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchOwnerRooms,
+  toggleRoomAvailability,
+} from "../../APP/Slices/roomSlice";
 
 const ListRoom = () => {
-  const [rooms, setRooms] = useState(roomsDummyData);
+  const [rooms, setRooms] = useState([]);
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.ui.user);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchOwnerRooms())
+        .unwrap()
+        .then((res) => {
+          // console.log("res", res);
+          setRooms(res);
+        });
+    }
+  }, [user]);
+
+  const toggleAvailability = async (roomId) => {
+    await dispatch(toggleRoomAvailability(roomId))
+      .unwrap()
+      .then((updatedRoom) => {
+        setRooms((prevRooms) =>
+          prevRooms.map((room) =>
+            room?._id === updatedRoom?._id ? updatedRoom : room
+          )
+        );
+      });
+  };
 
   return (
     <div>
@@ -36,16 +67,13 @@ const ListRoom = () => {
                 <td className="py-3 px-4 text-gray-700 border-t border-r-gray-300">
                   {room.roomType}
                 </td>
-                <td className="py-3 px-4 text-gray-700 border-t border-r-gray-300">
-                  {room.roomType}
-                </td>
-
+                
                 <td className="py-3 px-4 text-gray-700 border-t border-r-gray-300 max-sm:hidden">
                   {room.amenities.join(", ")}
                 </td>
 
                 <td className="py-3 px-4 text-gray-700 border-t border-r-gray-300">
-                  {room.pricePerNight}
+                 {import.meta.env.VITE_CURRENCY} {room.pricePerNight}
                 </td>
 
                 <td className="py-3 px-4 text-sm text-red-500 border-t border-r-gray-300 text-center">
@@ -54,6 +82,7 @@ const ListRoom = () => {
                       type="checkbox"
                       className="sr-only peer"
                       checked={room.isAvailable}
+                      onChange={() => toggleAvailability(room?._id)}
                     />
                     <div className="w-12 h-7 bg-slate-300 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-200"></div>
                     <span className="dot absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-5"></span>

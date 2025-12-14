@@ -14,13 +14,11 @@ export const fetchRooms = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/rooms");
-      toast.success(response?.data?.message);
       return response.data.data; // array of rooms
     } catch (error) {
       const message =
         error?.response?.data?.message || "Failed to fetch rooms!";
       console.error("Fetch rooms failed:", message);
-      toast.error(message);
       return rejectWithValue(message);
     }
   }

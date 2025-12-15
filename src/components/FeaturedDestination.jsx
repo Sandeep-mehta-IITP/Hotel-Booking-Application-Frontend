@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { roomsDummyData } from "../assets/assets";
 import HotelCard from "./HotelCard";
 import Title from "./Title";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +7,6 @@ import { fetchRooms } from "../APP/Slices/roomSlice";
 
 const FeaturedDestination = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.ui.user);
   const { rooms, loading, error } = useSelector((state) => state.room);
 
   const navigate = useNavigate();

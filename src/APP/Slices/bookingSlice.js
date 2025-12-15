@@ -20,13 +20,11 @@ export const checkRoomAvailability = createAsyncThunk(
         "/bookings/check-availability",
         payload
       );
-      toast.success(res?.data?.message || "Availability checked");
       return res.data?.data;
     } catch (error) {
       const message =
         error?.response?.data?.message || "Failed to check availability";
       console.error("Failed to check availability:", message);
-      toast.error(message);
       return rejectWithValue(message);
     }
   }
@@ -37,7 +35,6 @@ export const createBooking = createAsyncThunk(
   async (bookingData, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.post("/bookings/book", bookingData);
-      toast.success(res?.data?.message || "Booking created");
       return res.data?.data;
     } catch (error) {
       const message =

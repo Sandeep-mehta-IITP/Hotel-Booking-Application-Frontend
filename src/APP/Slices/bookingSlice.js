@@ -77,6 +77,25 @@ export const fetchHotelBookings = createAsyncThunk(
   }
 );
 
+export const stripePayment = createAsyncThunk(
+  "booking/stripePayment",
+  async (bookingId, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post("/bookings/stripe-payment", {
+        bookingId,
+      });
+
+      // backend se { url } aa rahi hai
+      return res.data?.data;
+    } catch (error) {
+      const message =
+        error?.response?.data?.message || "Payment initiation failed";
+      toast.error(message);
+      return rejectWithValue(message);
+    }
+  }
+);
+
 const bookingSlice = createSlice({
   name: "booking",
   initialState,
@@ -138,6 +157,21 @@ const bookingSlice = createSlice({
       state.totalBookings = action.payload.totalBookings;
     });
     builder.addCase(fetchHotelBookings.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    // STRIPE PAYMENT
+    builder.addCase(stripePayment.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+
+    builder.addCase(stripePayment.fulfilled, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(stripePayment.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

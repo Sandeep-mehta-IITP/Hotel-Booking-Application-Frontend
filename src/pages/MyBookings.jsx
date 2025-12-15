@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import Title from "../components/Title";
 import { assets } from "../assets/assets";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserBookings } from "../APP/Slices/bookingSlice";
+import { fetchUserBookings, stripePayment } from "../APP/Slices/bookingSlice";
 import { Loader, AlertCircle } from "lucide-react";
 
 const MyBookings = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.ui.user);
-  const { userBookings, loading: bookingLoading, error: bookingError } = useSelector(
-    (state) => state.booking
-  );
+  const {
+    userBookings,
+    loading: bookingLoading,
+    error: bookingError,
+  } = useSelector((state) => state.booking);
 
   useEffect(() => {
     if (user) {
@@ -20,7 +22,19 @@ const MyBookings = () => {
 
   const bookings = userBookings;
   // console.log("Bookings", bookings);
-  
+
+  const handlePayment = async (bookingId) => {
+    try {
+      const result = await dispatch(stripePayment(bookingId)).unwrap();
+
+      // Stripe checkout redirect
+      if (result?.url) {
+        window.location.href = result.url;
+      }
+    } catch (error) {
+      console.error("Stripe payment failed:", error);
+    }
+  };
 
   if (bookingLoading) {
     return (
@@ -36,35 +50,32 @@ const MyBookings = () => {
     );
   }
 
-  
+  if (bookingError) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center">
+        {/* Error Icon */}
+        <AlertCircle className="h-12 w-12 text-red-500" />
 
-if (bookingError) {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center">
-      {/* Error Icon */}
-      <AlertCircle className="h-12 w-12 text-red-500" />
+        {/* Error Text */}
+        <p className="text-gray-700 text-sm tracking-wide">
+          Failed to load your bookings
+        </p>
 
-      {/* Error Text */}
-      <p className="text-gray-700 text-sm tracking-wide">
-        Failed to load your bookings
-      </p>
+        {/* Sub text */}
+        <p className="text-gray-500 text-xs">
+          Something went wrong. Please try again.
+        </p>
 
-      {/* Sub text */}
-      <p className="text-gray-500 text-xs">
-        Something went wrong. Please try again.
-      </p>
-
-      {/* Retry Button */}
-      <button
-        onClick={() => dispatch(fetchUserBookings())}
-        className="mt-3 px-5 py-2 text-sm rounded-full bg-primary text-white hover:opacity-90 transition"
-      >
-        Retry
-      </button>
-    </div>
-  );
-}
-
+        {/* Retry Button */}
+        <button
+          onClick={() => dispatch(fetchUserBookings())}
+          className="mt-3 px-5 py-2 text-sm rounded-full bg-primary text-white hover:opacity-90 transition"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="py-28 md:pb-35 md:pt-32 md:px-16 lf:px-24 xl:px-32">
@@ -146,7 +157,10 @@ if (bookingError) {
                 </p>
               </div>
               {!booking.isPaid && (
-                <button className="px-4 py-1.5 mt-4 text-xs border border-gray-400 rounded-full hover:bg-gray-50 transition-all cursor-pointer">
+                <button
+                  onClick={() => handlePayment(booking?._id)}
+                  className="px-4 py-1.5 mt-4 text-xs border border-gray-400 rounded-full hover:bg-gray-50 transition-all cursor-pointer"
+                >
                   Pay Now
                 </button>
               )}

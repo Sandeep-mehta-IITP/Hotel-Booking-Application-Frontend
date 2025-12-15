@@ -1,9 +1,69 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Title from "../components/Title";
-import { assets, userBookingsDummyData } from "../assets/assets";
+import { assets } from "../assets/assets";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserBookings } from "../APP/Slices/bookingSlice";
+import { Loader, AlertCircle } from "lucide-react";
 
 const MyBookings = () => {
-  const [bookings, setBookings] = useState(userBookingsDummyData);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.ui.user);
+  const { userBookings, loading: bookingLoading, error: bookingError } = useSelector(
+    (state) => state.booking
+  );
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchUserBookings());
+    }
+  }, [dispatch, user]);
+
+  const bookings = userBookings;
+
+  if (bookingLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-5 bg-white">
+        {/* Loader Icon */}
+        <Loader className="w-12 h-12 animate-spin font-semibold text-blue-600" />
+
+        {/* Text */}
+        <p className="text-gray-500 text-sm tracking-wide animate-pulse">
+          Loading your bookings...
+        </p>
+      </div>
+    );
+  }
+
+  
+
+if (bookingError) {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center">
+      {/* Error Icon */}
+      <AlertCircle className="h-12 w-12 text-red-500" />
+
+      {/* Error Text */}
+      <p className="text-gray-700 text-sm tracking-wide">
+        Failed to load your bookings
+      </p>
+
+      {/* Sub text */}
+      <p className="text-gray-500 text-xs">
+        Something went wrong. Please try again.
+      </p>
+
+      {/* Retry Button */}
+      <button
+        onClick={() => dispatch(fetchUserBookings())}
+        className="mt-3 px-5 py-2 text-sm rounded-full bg-primary text-white hover:opacity-90 transition"
+      >
+        Retry
+      </button>
+    </div>
+  );
+}
+
+
   return (
     <div className="py-28 md:pb-35 md:pt-32 md:px-16 lf:px-24 xl:px-32">
       <Title
@@ -84,7 +144,9 @@ const MyBookings = () => {
                 </p>
               </div>
               {!booking.isPaid && (
-                <button className="px-4 py-1.5 mt-4 text-xs border border-gray-400 rounded-full hover:bg-gray-50 transition-all cursor-pointer">Pay Now</button>
+                <button className="px-4 py-1.5 mt-4 text-xs border border-gray-400 rounded-full hover:bg-gray-50 transition-all cursor-pointer">
+                  Pay Now
+                </button>
               )}
             </div>
           </div>

@@ -51,7 +51,6 @@ export const fetchUserBookings = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get("/bookings/user");
-      toast.success(res?.data?.message || "User bookings fetched");
       return res.data?.data;
     } catch (error) {
       const message =

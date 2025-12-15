@@ -35,7 +35,6 @@ const Navbar = () => {
   ];
 
   const dispatch = useDispatch();
-  const showHotelReg = useSelector((state) => state.ui.showHotelReg);
   const userData = useSelector((state) => state?.user?.userData);
 
   //console.log(" userData", userData);

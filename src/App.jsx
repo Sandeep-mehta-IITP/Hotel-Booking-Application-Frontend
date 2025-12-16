@@ -53,18 +53,20 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutUs />} />
-           <Route path="/contact-us" element={<ContactUs />} />
-           <Route path="/help-center" element={<HelpCenter />} />
-           <Route path="/safety-info" element={<SafetyInformation />} />
-           <Route path="/cancellation-options" element={<CancellationOptions />} />
-           <Route path="/accessibility" element={<Accessibility />} />
-           <Route path="/careers" element={<Careers />} />
-           <Route path="/press" element={<Press />} />
-           <Route path="/partners" element={<Partners />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/help-center" element={<HelpCenter />} />
+          <Route path="/safety-info" element={<SafetyInformation />} />
+          <Route path="/cancellation-options" element={<CancellationOptions />} />
+          <Route path="/accessibility" element={<Accessibility />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/press" element={<Press />} />
+          <Route path="/partners" element={<Partners />} />
           <Route path="/rooms" element={<AllRooms />} />
           <Route path="/rooms/:id" element={<RoomDetails />} />
           <Route path="/my-bookings" element={<MyBookings />} />
           <Route path="/loader/:nextUrl" element={<Loader />} />
+
+          {/* Owenr Routes */}
           <Route path="/owner" element={<Layout />}>
             <Route index element={<Dashboard />} />
             <Route path="add-room" element={<AddRoom />} />

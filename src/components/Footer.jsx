@@ -69,7 +69,7 @@ const Footer = () => {
               <a href="/safety-info">Safety Information</a>
             </li>
             <li>
-              <a href="#">Cancellation Options</a>
+              <a href="cancellation-options">Cancellation Options</a>
             </li>
             <li>
               <a href="/contact-us">Contact Us</a>

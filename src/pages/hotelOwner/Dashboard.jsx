@@ -27,7 +27,7 @@ const Dashboard = () => {
   
 
   return (
-    <div>
+    <div className="pb-8">
       <Title
         align="left"
         title="Dashboard"

@@ -15,6 +15,8 @@ import ListRoom from "./pages/hotelOwner/ListRoom";
 import { useSelector } from "react-redux";
 import { useClerkToRedux } from "./hooks/useClerkToRedux";
 import Loader from "./components/Loader";
+import AboutUs from "./pages/About";
+import ContactUs from "./pages/Contact";
 
 function App() {
   useClerkToRedux();
@@ -42,6 +44,8 @@ function App() {
       <div className="min-h-[70vh]">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutUs />} />
+           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/rooms" element={<AllRooms />} />
           <Route path="/rooms/:id" element={<RoomDetails />} />
           <Route path="/my-bookings" element={<MyBookings />} />

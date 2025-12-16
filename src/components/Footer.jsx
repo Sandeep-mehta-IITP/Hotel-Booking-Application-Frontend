@@ -42,7 +42,7 @@ const Footer = () => {
           <p className="font-playfair text-lg text-gray-800">COMPANY</p>
           <ul className="mt-3 flex flex-col gap-2 text-sm">
             <li>
-              <a href="#">About</a>
+              <a href="/about">About</a>
             </li>
             <li>
               <a href="#">Careers</a>
@@ -63,7 +63,7 @@ const Footer = () => {
           <p className="font-playfair text-lg text-gray-800">SUPPORT</p>
           <ul className="mt-3 flex flex-col gap-2 text-sm">
             <li>
-              <a href="#">Help Center</a>
+              <a href="/">Help Center</a>
             </li>
             <li>
               <a href="#">Safety Information</a>
@@ -72,7 +72,7 @@ const Footer = () => {
               <a href="#">Cancellation Options</a>
             </li>
             <li>
-              <a href="#">Contact Us</a>
+              <a href="/contact-us">Contact Us</a>
             </li>
             <li>
               <a href="#">Accessibility</a>

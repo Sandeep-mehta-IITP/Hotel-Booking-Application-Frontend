@@ -17,6 +17,8 @@ import { useClerkToRedux } from "./hooks/useClerkToRedux";
 import Loader from "./components/Loader";
 import AboutUs from "./pages/About";
 import ContactUs from "./pages/Contact";
+import HelpCenter from "./pages/HelpCenter";
+import SafetyInformation from "./pages/SafetyInformation";
 
 function App() {
   useClerkToRedux();
@@ -46,6 +48,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutUs />} />
            <Route path="/contact-us" element={<ContactUs />} />
+           <Route path="/help-center" element={<HelpCenter />} />
+           <Route path="/safety-info" element={<SafetyInformation />} />
           <Route path="/rooms" element={<AllRooms />} />
           <Route path="/rooms/:id" element={<RoomDetails />} />
           <Route path="/my-bookings" element={<MyBookings />} />

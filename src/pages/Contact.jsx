@@ -3,7 +3,7 @@ import { assets } from "../assets/assets";
 
 const ContactUs = () => {
   return (
-    <div className="bg-gray-50 text-gray-800">
+    <div className="bg-gray-50 text-gray-800 mt-8">
 
       {/* Hero Section */}
       <div className="relative h-[60vh] flex items-center justify-center bg-[url('/src/assets/heroImage.png')] bg-cover bg-center">

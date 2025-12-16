@@ -63,10 +63,10 @@ const Footer = () => {
           <p className="font-playfair text-lg text-gray-800">SUPPORT</p>
           <ul className="mt-3 flex flex-col gap-2 text-sm">
             <li>
-              <a href="/">Help Center</a>
+              <a href="/help-center">Help Center</a>
             </li>
             <li>
-              <a href="#">Safety Information</a>
+              <a href="/safety-info">Safety Information</a>
             </li>
             <li>
               <a href="#">Cancellation Options</a>

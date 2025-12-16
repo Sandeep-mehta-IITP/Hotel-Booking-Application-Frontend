@@ -51,10 +51,7 @@ const Footer = () => {
               <a href="/press">Press</a>
             </li>
             <li>
-              <a href="#">Blog</a>
-            </li>
-            <li>
-              <a href="#">Partners</a>
+              <a href="/partners">Partners</a>
             </li>
           </ul>
         </div>

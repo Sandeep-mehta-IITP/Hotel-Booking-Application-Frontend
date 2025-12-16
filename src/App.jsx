@@ -22,6 +22,7 @@ import SafetyInformation from "./pages/SafetyInformation";
 import CancellationOptions from "./pages/CancellationOptions";
 import Accessibility from "./pages/Accessibility";
 import Careers from "./pages/Careers";
+import Press from "./pages/Press";
 
 function App() {
   useClerkToRedux();
@@ -56,6 +57,7 @@ function App() {
            <Route path="/cancellation-options" element={<CancellationOptions />} />
            <Route path="/accessibility" element={<Accessibility />} />
            <Route path="/careers" element={<Careers />} />
+           <Route path="/press" element={<Press />} />
           <Route path="/rooms" element={<AllRooms />} />
           <Route path="/rooms/:id" element={<RoomDetails />} />
           <Route path="/my-bookings" element={<MyBookings />} />

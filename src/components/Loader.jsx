@@ -1,4 +1,4 @@
-import { Loader } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -16,7 +16,7 @@ const Loader = () => {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <Loader className="w-12 h-12 animate-spin font-semibold text-blue-600" />
+      <Loader2 className="w-12 h-12 animate-spin font-semibold text-blue-600" />
     </div>
   );
 };

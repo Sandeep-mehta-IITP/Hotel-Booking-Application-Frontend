@@ -1,4 +1,4 @@
-import { getAuth } from "@clerk/clerk-react";
+
 import axios from "axios";
 
 export const axiosInstance = axios.create({
@@ -7,6 +7,7 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(async (config) => {
+  
   const token = await window.Clerk?.session?.getToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

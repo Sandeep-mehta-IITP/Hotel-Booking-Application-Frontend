@@ -27,6 +27,7 @@ import Partners from "./pages/Partners";
 
 
 function App() {
+  
   useClerkToRedux();
   const isOwnerPath = useLocation().pathname.includes("owner");
 

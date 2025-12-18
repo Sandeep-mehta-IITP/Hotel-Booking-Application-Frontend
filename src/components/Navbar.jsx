@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
-import { useClerk, UserButton } from "@clerk/clerk-react";
 import { useSelector, useDispatch } from "react-redux";
 import { setShowHotelReg } from "../APP/Slices/uiSlice";
-
+import { logoutUser } from "../APP/Slices/authSlice";
 
 const BookIcon = () => (
   <svg
@@ -43,8 +42,9 @@ const Navbar = () => {
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
-  const { openSignIn } = useClerk();
   const user = useSelector((state) => state.ui.user);
   const navigate = useNavigate();
   const location = useLocation();
@@ -52,6 +52,16 @@ const Navbar = () => {
   const handleOpenHotelReg = () => {
     dispatch(setShowHotelReg(true));
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (location.pathname !== "/") {
@@ -68,6 +78,11 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [location.pathname]);
+
+  // Logout Handler
+  const logoutHandler = async () => {
+    await dispatch(logoutUser()).then(() => navigate("/"));
+  };
 
   return (
     <nav
@@ -120,21 +135,44 @@ const Navbar = () => {
 
       {/* Desktop Right */}
       <div className="hidden md:flex items-center gap-4">
-        
         {user ? (
-          <UserButton>
-            <UserButton.MenuItems>
-              <UserButton.Action
-                label="My Bookings"
-                labelIcon={<BookIcon />}
-                onClick={() => navigate("/my-bookings")}
-              />
-            </UserButton.MenuItems>
-          </UserButton>
+          <div className="relative" ref={dropdownRef}>
+            <img
+              src={user.avatar || assets.defaultAvatar}
+              alt="profile"
+              className="w-9 h-9 rounded-full cursor-pointer object-cover"
+              onClick={() => setShowDropdown(!showDropdown)}
+            />
+
+            {showDropdown && (
+              <div className="absolute right-0 mt-3 w-44 bg-white shadow-lg rounded-lg overflow-hidden text-sm">
+                <button
+                  className="flex items-center gap-2 px-4 py-2 w-full hover:bg-gray-100"
+                  onClick={() => {
+                    navigate("/my-bookings");
+                    setShowDropdown(false);
+                  }}
+                >
+                  <BookIcon />
+                  My Bookings
+                </button>
+
+                <button
+                  className="px-4 py-2 w-full text-left hover:bg-gray-100 text-red-500"
+                  onClick={() => {
+                    logoutHandler();
+                    setShowDropdown(false);
+                  }}
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         ) : (
           <button
             className="bg-black text-white px-8 py-2.5 rounded-full ml-4 transition-all duration-500 cursor-pointer"
-            onClick={openSignIn}
+            onClick={() => navigate("/login")}
           >
             Login
           </button>
@@ -145,15 +183,12 @@ const Navbar = () => {
 
       <div className="flex items-center gap-3 md:hidden">
         {user && (
-          <UserButton>
-            <UserButton.MenuItems>
-              <UserButton.Action
-                label="My Bookings"
-                labelIcon={<BookIcon />}
-                onClick={() => navigate("/my-bookings")}
-              />
-            </UserButton.MenuItems>
-          </UserButton>
+          <img
+            src={user.avatar || assets.defaultAvatar}
+            alt="profile"
+            className="w-8 h-8 rounded-full object-cover"
+            onClick={() => navigate("/my-bookings")}
+          />
         )}
         <img
           src={assets.menuIcon}
@@ -196,7 +231,7 @@ const Navbar = () => {
         {!user && (
           <button
             className="bg-black text-white px-8 py-2.5 cursor-pointer rounded-full transition-all duration-500"
-            onClick={openSignIn}
+            onClick={() => navigate("/login")}
           >
             Login
           </button>

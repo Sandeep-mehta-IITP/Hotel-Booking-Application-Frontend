@@ -24,6 +24,8 @@ import Accessibility from "./pages/Accessibility";
 import Careers from "./pages/Careers";
 import Press from "./pages/Press";
 import Partners from "./pages/Partners";
+import LoginPage from "./components/auth/LoginPage";
+import SignupPage from "./components/auth/SignupPage";
 
 
 function App() {
@@ -52,7 +54,9 @@ function App() {
       {showHotelReg && <HotelReg />}
       <div className="min-h-[70vh]">
         <Routes>
+          <Route path="/signup" element={<SignupPage />} />
           <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/help-center" element={<HelpCenter />} />

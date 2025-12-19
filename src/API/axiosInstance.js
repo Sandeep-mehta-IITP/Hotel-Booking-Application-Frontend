@@ -1,28 +1,18 @@
-
 import axios from "axios";
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BACKEND_URL,
-  withCredentials: true,
+  withCredentials: true, // 🔥 VERY IMPORTANT
 });
 
-axiosInstance.interceptors.request.use(async (config) => {
-  
-  const token = await window.Clerk?.session?.getToken();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-// Response interceptor
+// ✅ Response Interceptor
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    let message = "Something went wrong 😕!!!";
+    let message = "Something went wrong 😕";
 
     if (error.response?.data?.message) {
-      message = error.response?.data?.message;
+      message = error.response.data.message;
     } else if (error.message) {
       message = error.message;
     }

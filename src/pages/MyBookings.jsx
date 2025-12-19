@@ -7,7 +7,7 @@ import { Loader, AlertCircle } from "lucide-react";
 
 const MyBookings = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.ui.user);
+  const {userData, isAuthenticated} = useSelector((state) => state?.auth);
   const {
     userBookings,
     loading: bookingLoading,
@@ -15,13 +15,13 @@ const MyBookings = () => {
   } = useSelector((state) => state.booking);
 
   useEffect(() => {
-    if (user) {
+    if (isAuthenticated) {
       dispatch(fetchUserBookings());
     }
-  }, [dispatch, user]);
+  }, [dispatch, isAuthenticated]);
 
   const bookings = userBookings;
-  // console.log("Bookings", bookings);
+   console.log("Bookings", bookings);
 
   const handlePayment = async (bookingId) => {
     try {

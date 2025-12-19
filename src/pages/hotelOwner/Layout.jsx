@@ -6,8 +6,12 @@ import { useSelector } from "react-redux";
 
 const Layout = () => {
   const navigate = useNavigate();
-  const userData = useSelector((state) => state?.user?.userData);
+  const { userData } = useSelector((state) => state?.auth);
+  // console.log("userData in layout", userData);
+
   const isOwner = userData?.role === "hotelOwner";
+
+  // console.log("isOwner in layout", isOwner);
 
   useEffect(() => {
     if (!isOwner) {

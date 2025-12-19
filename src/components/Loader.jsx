@@ -15,7 +15,7 @@ const Loader = () => {
   }, [nextUrl]);
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center">
       <Loader2 className="w-12 h-12 animate-spin font-semibold text-blue-600" />
     </div>
   );

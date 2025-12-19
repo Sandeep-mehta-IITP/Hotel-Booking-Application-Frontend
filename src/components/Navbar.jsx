@@ -34,7 +34,9 @@ const Navbar = () => {
   ];
 
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state?.user?.userData);
+  const {userData, isAuthenticated} = useSelector((state) => state?.auth);
+  // const {} = useSelector((state) => state?.user);
+  const user = userData;
 
   //console.log(" userData", userData);
 
@@ -45,7 +47,8 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
-  const user = useSelector((state) => state.ui.user);
+  
+  
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -119,7 +122,7 @@ const Navbar = () => {
             />
           </a>
         ))}
-        {user && (
+        {isAuthenticated && (
           <button
             className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${
               isScrolled ? "text-black" : "text-white"
@@ -135,12 +138,12 @@ const Navbar = () => {
 
       {/* Desktop Right */}
       <div className="hidden md:flex items-center gap-4">
-        {user ? (
+        {isAuthenticated ? (
           <div className="relative" ref={dropdownRef}>
             <img
-              src={user.avatar || assets.defaultAvatar}
+              src={user?.image || assets.defaultAvatar}
               alt="profile"
-              className="w-9 h-9 rounded-full cursor-pointer object-cover"
+              className="w-10 h-10 rounded-full cursor-pointer object-cover"
               onClick={() => setShowDropdown(!showDropdown)}
             />
 
@@ -182,11 +185,11 @@ const Navbar = () => {
       {/* Mobile Menu Button */}
 
       <div className="flex items-center gap-3 md:hidden">
-        {user && (
+        {isAuthenticated && (
           <img
-            src={user.avatar || assets.defaultAvatar}
+            src={user.image || assets.defaultAvatar}
             alt="profile"
-            className="w-8 h-8 rounded-full object-cover"
+            className="w-9 h-9 rounded-full object-cover"
             onClick={() => navigate("/my-bookings")}
           />
         )}
@@ -217,7 +220,7 @@ const Navbar = () => {
           </a>
         ))}
 
-        {user && (
+        {isAuthenticated && (
           <button
             className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all"
             onClick={() =>
@@ -228,7 +231,7 @@ const Navbar = () => {
           </button>
         )}
 
-        {!user && (
+        {!isAuthenticated && (
           <button
             className="bg-black text-white px-8 py-2.5 cursor-pointer rounded-full transition-all duration-500"
             onClick={() => navigate("/login")}

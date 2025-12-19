@@ -65,6 +65,22 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
+export const getCurrentUser = createAsyncThunk(
+  "auth/getCurrentUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get("/users/me", {});
+      //  console.log("curent user", response.data);
+      //  console.log("current user", response.data.data);
+
+      return response.data?.data;
+    } catch (error) {
+      console.log("CURRENT USER FETCHED FAILED:", error.userMessage);
+      return rejectWithValue(error.userMessage);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -116,8 +132,23 @@ const authSlice = createSlice({
     builder.addCase(logoutUser.rejected, (state, action) => {
       state.loading = false;
     });
+
+    // login user
+    builder.addCase(getCurrentUser.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(getCurrentUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.userData = action.payload;
+      state.isAuthenticated = true;
+    });
+
+    builder.addCase(getCurrentUser.rejected, (state, action) => {
+      state.loading = false;
+      state.userData = null;
+    });
   },
 });
-
 
 export default authSlice.reducer;

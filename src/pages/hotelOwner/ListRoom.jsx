@@ -11,18 +11,18 @@ const ListRoom = () => {
   const [rooms, setRooms] = useState([]);
 
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.ui.user);
+  const {userData, isAuthenticated} = useSelector((state) => state?.auth);
 
   useEffect(() => {
-    if (user) {
+    if (isAuthenticated) {
       dispatch(fetchOwnerRooms())
         .unwrap()
         .then((res) => {
-          // console.log("res", res);
+          //console.log("res", res);
           setRooms(res);
         });
     }
-  }, [user]);
+  }, [isAuthenticated, userData]);
 
   const toggleAvailability = async (roomId) => {
     await dispatch(toggleRoomAvailability(roomId))

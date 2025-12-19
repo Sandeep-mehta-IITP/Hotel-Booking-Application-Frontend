@@ -84,7 +84,7 @@ export const stripePayment = createAsyncThunk(
     
     try {
       const res = await axiosInstance.post("/bookings/stripe-payment", 
-        bookingId,
+        {bookingId},
       );
 
       // backend se { url } aa rahi hai

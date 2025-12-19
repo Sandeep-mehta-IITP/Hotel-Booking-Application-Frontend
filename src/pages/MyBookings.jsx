@@ -24,6 +24,8 @@ const MyBookings = () => {
    console.log("Bookings", bookings);
 
   const handlePayment = async (bookingId) => {
+    console.log("booking id in mybooking", bookingId);
+    
     try {
       const result = await dispatch(stripePayment({bookingId})).unwrap();
 

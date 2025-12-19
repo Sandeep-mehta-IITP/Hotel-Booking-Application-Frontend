@@ -34,12 +34,12 @@ function App() {
 
   const dispatch = useDispatch();
 
-  const [initialLoading, setInitialLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(false);
 
   useEffect(() => {
     dispatch(healthCheck()).then(() => {
       dispatch(getCurrentUser()).then(() => {
-        setInitialLoading(false);
+        setInitialLoading(true);
       });
     });
 
@@ -50,7 +50,7 @@ function App() {
     return () => clearInterval(Interval);
   }, [dispatch]);
 
-  if (initialLoading) {
+  if (!initialLoading) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-white via-[#f6f7f9] to-white px-4">
         <div className="flex flex-col items-center justify-center text-center w-full max-w-md gap-8 py-12 min-h-[60vh]">

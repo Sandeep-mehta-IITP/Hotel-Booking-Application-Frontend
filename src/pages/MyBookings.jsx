@@ -3,11 +3,11 @@ import Title from "../components/Title";
 import { assets } from "../assets/assets";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserBookings, stripePayment } from "../APP/Slices/bookingSlice";
-import { Loader, AlertCircle } from "lucide-react";
+import { Loader, AlertCircle, RefreshCcw } from "lucide-react";
 
 const MyBookings = () => {
   const dispatch = useDispatch();
-  const {userData, isAuthenticated} = useSelector((state) => state?.auth);
+  const { userData, isAuthenticated } = useSelector((state) => state?.auth);
   const {
     userBookings,
     loading: bookingLoading,
@@ -21,13 +21,13 @@ const MyBookings = () => {
   }, [dispatch, isAuthenticated]);
 
   const bookings = userBookings;
-   console.log("Bookings", bookings);
+  //console.log("Bookings", bookings);
 
   const handlePayment = async (bookingId) => {
-    console.log("booking id in mybooking", bookingId);
-    
+    //console.log("booking id in mybooking", bookingId);
+
     try {
-      const result = await dispatch(stripePayment({bookingId})).unwrap();
+      const result = await dispatch(stripePayment({ bookingId })).unwrap();
 
       // Stripe checkout redirect
       if (result?.url) {
@@ -40,41 +40,59 @@ const MyBookings = () => {
 
   if (bookingLoading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-5 bg-white">
-        {/* Loader Icon */}
-        <Loader className="w-12 h-12 animate-spin font-semibold text-blue-600" />
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-white">
+        <div className="flex flex-col items-center gap-6 px-6 py-8 rounded-2xl bg-white shadow-xl border border-gray-100">
+          {/* Spinner with soft glow */}
+          <div className="relative">
+            <div className="absolute inset-0 rounded-full blur-xl bg-blue-500/20" />
+            <Loader className="relative w-12 h-12 animate-spin text-blue-600" />
+          </div>
 
-        {/* Text */}
-        <p className="text-gray-500 text-sm tracking-wide animate-pulse">
-          Loading your bookings...
-        </p>
+          {/* Title */}
+          <p className="text-sm font-medium text-gray-700 tracking-wide">
+            Loading your bookings detials....
+          </p>
+        </div>
       </div>
     );
   }
 
   if (bookingError) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center">
-        {/* Error Icon */}
-        <AlertCircle className="h-12 w-12 text-red-500" />
+      <div className="fixed inset-0 z-40 flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-white">
+        <div className="flex flex-col items-center text-center gap-5 px-8 py-10 rounded-2xl bg-white shadow-xl border border-gray-100 max-w-sm w-full">
+          {/* Icon with soft background */}
+          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-50">
+            <AlertCircle className="w-7 h-7 text-red-500" />
+          </div>
 
-        {/* Error Text */}
-        <p className="text-gray-700 text-sm tracking-wide">
-          Failed to load your bookings
-        </p>
+          {/* Title */}
+          <h2 className="text-base font-semibold text-gray-800">
+            Unable to load bookings
+          </h2>
 
-        {/* Sub text */}
-        <p className="text-gray-500 text-xs">
-          Something went wrong. Please try again.
-        </p>
+          {/* Description */}
+          <p className="text-sm text-gray-500 leading-relaxed">
+            We couldn’t fetch your booking details right now. Please check your
+            connection or try again.
+          </p>
 
-        {/* Retry Button */}
-        <button
-          onClick={() => dispatch(fetchUserBookings())}
-          className="mt-3 px-5 py-2 text-sm rounded-full bg-primary text-white hover:opacity-90 transition"
-        >
-          Retry
-        </button>
+          {/* Actions */}
+          <div className="flex gap-3 mt-2">
+            <button
+              onClick={() => dispatch(fetchUserBookings())}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-white text-sm cursor-pointer font-medium shadow hover:opacity-90 transition"
+            >
+              <RefreshCcw className="w-4 h-4" />
+              Retry
+            </button>
+          </div>
+
+          {/* Helper text */}
+          <p className="text-[11px] text-gray-400">
+            If the issue persists, please refresh the page.
+          </p>
+        </div>
       </div>
     );
   }

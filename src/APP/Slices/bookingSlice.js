@@ -80,7 +80,7 @@ export const fetchHotelBookings = createAsyncThunk(
 export const stripePayment = createAsyncThunk(
   "booking/stripePayment",
   async ({bookingId}, { rejectWithValue }) => {
-    console.log("booking id in tunk", bookingId);
+    //console.log("booking id in tunk", bookingId);
     
     try {
       const res = await axiosInstance.post("/bookings/stripe-payment", 

@@ -80,10 +80,12 @@ export const fetchHotelBookings = createAsyncThunk(
 export const stripePayment = createAsyncThunk(
   "booking/stripePayment",
   async ({bookingId}, { rejectWithValue }) => {
+    console.log("booking id in tunk", bookingId);
+    
     try {
-      const res = await axiosInstance.post("/bookings/stripe-payment", {
+      const res = await axiosInstance.post("/bookings/stripe-payment", 
         bookingId,
-      });
+      );
 
       // backend se { url } aa rahi hai
       return res.data?.data;

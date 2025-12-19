@@ -25,7 +25,7 @@ const MyBookings = () => {
 
   const handlePayment = async (bookingId) => {
     try {
-      const result = await dispatch(stripePayment(bookingId)).unwrap();
+      const result = await dispatch(stripePayment({bookingId})).unwrap();
 
       // Stripe checkout redirect
       if (result?.url) {

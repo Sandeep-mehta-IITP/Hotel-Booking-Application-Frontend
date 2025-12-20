@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../API/axiosInstance";
 import { toast } from "react-hot-toast";
+import { registerHotel } from "./hotelSlice";
 
 const initialState = {
   userData: null,
@@ -93,7 +94,7 @@ const authSlice = createSlice({
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.loading = false;
       state.userData = action.payload;
-     // console.log(" register user in user slice", state.userData);
+      // console.log(" register user in user slice", state.userData);
 
       state.isAuthenticated = true;
     });
@@ -132,6 +133,20 @@ const authSlice = createSlice({
     builder.addCase(logoutUser.rejected, (state, action) => {
       state.loading = false;
     });
+
+    // hotel register ke bad updated user
+    builder
+      .addCase(registerHotel.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(registerHotel.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userData = action.payload.user;
+        state.isAuthenticated = true;
+      })
+      .addCase(registerHotel.rejected, (state) => {
+        state.loading = false;
+      });
 
     // login user
     builder.addCase(getCurrentUser.pending, (state) => {

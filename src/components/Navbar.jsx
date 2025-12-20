@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { setShowHotelReg } from "../APP/Slices/uiSlice";
 import { logoutUser } from "../APP/Slices/authSlice";
 
-
 const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/" },
@@ -16,11 +15,11 @@ const Navbar = () => {
   ];
 
   const dispatch = useDispatch();
-  const {userData, isAuthenticated} = useSelector((state) => state?.auth);
+  const { userData, isAuthenticated } = useSelector((state) => state?.auth);
   // const {} = useSelector((state) => state?.user);
   const user = userData;
 
-  //console.log(" userData", userData);
+  // console.log(" userData", userData);
 
   const isOwner = userData?.role === "hotelOwner";
 
@@ -29,8 +28,6 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
-  
-  
   const navigate = useNavigate();
   const location = useLocation();
 

@@ -16,14 +16,12 @@ export const registerHotel = createAsyncThunk(
       toast.success(response?.data?.message || "Hotel Registered Successfully");
       return response.data?.data;
     } catch (error) {
-    
-      console.error("Failed to register hotel:", error);
+      console.error("Failed to register hotel:", error.userMessage);
       toast.error(error.userMessage || "Failed to register hotel.");
-      return rejectWithValue(message);
+      return rejectWithValue(error.userMessage);
     }
   }
 );
-
 
 const hotelSlice = createSlice({
   name: "hotel",
@@ -37,7 +35,7 @@ const hotelSlice = createSlice({
 
     builder.addCase(registerHotel.fulfilled, (state, action) => {
       state.loading = false;
-      state.hotel = action.payload;
+      state.hotel = action.payload.hotel;
     });
 
     builder.addCase(registerHotel.rejected, (state, action) => {

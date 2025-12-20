@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { assets, cities } from "../assets/assets";
+import { assets } from "../assets/assets";
 import { useSelector, useDispatch } from "react-redux";
 import { setShowHotelReg } from "../APP/Slices/uiSlice";
 import { registerHotel } from "../APP/Slices/hotelSlice";
 import { fetchUserData } from "../APP/Slices/userSlice";
 
 const HotelReg = () => {
-  // const showHotelReg = useSelector((state) => state.ui.showHotelReg);
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.hotel);
 
@@ -25,117 +24,109 @@ const HotelReg = () => {
   };
 
   const handleCloseHotelReg = () => {
-    dispatch(setShowHotelReg(false));
+    if (!loading) {
+      dispatch(setShowHotelReg(false));
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    dispatch(registerHotel(formData)).then((res) => {
-      if (res.type === "hotel/registerHotel/fulfilled") {
-        dispatch(fetchUserData())
-        handleCloseHotelReg();
-      }
-    });
+    try {
+      await dispatch(registerHotel(formData)).unwrap();
+      dispatch(fetchUserData());
+      handleCloseHotelReg();
+    } catch (err) {
+      // error already handled in slice
+    }
   };
 
   return (
-    <div className="fixed top-0 bottom-0 left-0 right-0 z-100 flex items-center justify-center bg-black/70">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
       <form
         onSubmit={handleSubmit}
         className="flex bg-white rounded-xl max-w-4xl max-md:mx-2"
       >
         <img
           src={assets.regImage}
-          alt="reg-image"
+          alt="reg"
           className="w-1/2 rounded-xl hidden md:block"
         />
 
         <div className="relative flex flex-col items-center md:w-1/2 p-8 md:p-10">
           <img
             src={assets.closeIcon}
-            alt="close-icon"
-            className="absolute top-4 right-4 h-4 w-4 cursor-pointer"
-            onClick={() => handleCloseHotelReg()}
+            alt="close"
+            className={`absolute top-4 right-4 h-4 w-4 ${
+              loading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+            }`}
+            onClick={handleCloseHotelReg}
           />
+
           <p className="text-2xl font-semibold mt-6">Register Your Hotel</p>
 
-          {/* ERROR */}
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+          {error && (
+            <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
+          )}
 
-          {/*----Hotel Name-----*/}
+          {/* Hotel Name */}
           <div className="w-full mt-4">
-            <label htmlFor="name" className="font-medium text-gray-500">
-              Hotel Name
-            </label>
+            <label className="font-medium text-gray-500">Hotel Name</label>
             <input
-              type="text"
               id="name"
               value={formData.name}
               onChange={handleChange}
-              placeholder="Type Here"
-              className="border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-indigo-500 font-light"
               required
+              className="border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-indigo-500"
             />
           </div>
 
-          {/*----Phone-----*/}
+          {/* Phone */}
           <div className="w-full mt-4">
-            <label htmlFor="contact" className="font-medium text-gray-500">
-              Phone
-            </label>
+            <label className="font-medium text-gray-500">Phone</label>
             <input
-              type="text"
               id="contact"
+              type="tel"
+              pattern="[0-9]{10}"
+              maxLength="10"
               value={formData.contact}
               onChange={handleChange}
-              placeholder="Type Here"
-              className="border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-indigo-500 font-light"
               required
+              className="border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-indigo-500"
             />
           </div>
 
-          {/*----Address-----*/}
+          {/* Address */}
           <div className="w-full mt-4">
-            <label htmlFor="address" className="font-medium text-gray-500">
-              Address
-            </label>
+            <label className="font-medium text-gray-500">Address</label>
             <input
-              type="text"
               id="address"
               value={formData.address}
               onChange={handleChange}
-              placeholder="Type Here"
-              className="border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-indigo-500 font-light"
               required
+              className="border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-indigo-500"
             />
           </div>
 
-          {/*----Select City Drop Down-----*/}
+          {/* City */}
           <div className="w-full mt-4 max-w-60 mr-auto">
-            <label htmlFor="city" className="font-medium text-gray-500">
-              City
-            </label>
-
-            <select
+            <label className="font-medium text-gray-500">City</label>
+            <input
               id="city"
               value={formData.city}
               onChange={handleChange}
-              className="border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-indigo-500 font-light"
               required
-            >
-              <option value="">Select City</option>
-              {cities.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-            </select>
+              className="border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-indigo-500"
+            />
           </div>
 
           <button
             disabled={loading}
-            className="bg-indigo-500 hover:bg-indigo-600 transition-all text-white mr-auto px-6 py-2 rounded cursor-pointer mt-6"
+            className={`mt-6 px-6 py-2 rounded text-white mr-auto ${
+              loading
+                ? "bg-indigo-400 cursor-not-allowed"
+                : "bg-indigo-500 hover:bg-indigo-600"
+            }`}
           >
             {loading ? "Registering..." : "Register"}
           </button>

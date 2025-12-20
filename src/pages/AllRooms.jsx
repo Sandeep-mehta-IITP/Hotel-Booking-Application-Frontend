@@ -5,6 +5,7 @@ import StarRating from "../components/StarRating";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRooms } from "../APP/Slices/roomSlice";
 import AllRoomsPageSkeleton from "../components/ui/AllRoomsPageSkeleton";
+import NotFoundRooms from "../components/NotFoundRooms";
 
 const CheckBox = ({ label, selected = false, onChange = () => {} }) => {
   return (
@@ -160,6 +161,10 @@ const AllRooms = () => {
   if (loading) {
     return <AllRoomsPageSkeleton />
   }
+
+  if (!loading && filteredRooms.length === 0) {
+  return <NotFoundRooms searchQuery={searchParams.get("destination")} />;
+}
 
   return (
     <div className="flex flex-col-reverse lg:flex-row items-start justify-between pt-28 md:pt-36 px-4 md:px-16 lg:px-24">

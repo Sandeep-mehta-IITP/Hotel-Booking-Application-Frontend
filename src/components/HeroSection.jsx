@@ -1,21 +1,51 @@
 import React, { useState } from "react";
 import { assets, cities } from "../assets/assets";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addRecentCity } from "../APP/Slices/userSlice";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const HeroSection = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [destination, setDestination] = useState("");
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
+  const [guests, setGuests] = useState(1);
 
-  const handleSearch = async (e) => {
+  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+
+  const handleSearch = (e) => {
     e.preventDefault();
 
-    if (!destination.trim()) return;
+    if (!destination.trim()) {
+      toast.error("Please enter a destination");
+      return;
+    }
+
+    if (!checkIn || !checkOut) {
+      toast.error("Please select both check-in and check-out dates");
+      return;
+    }
+
+    if (checkIn < today) {
+      toast.error("Check-in date cannot be before today");
+      return;
+    }
+
+    if (checkOut <= checkIn) {
+      toast.error("Check-out date must be after check-in date");
+      return;
+    }
+
     dispatch(addRecentCity(destination.trim()));
-    navigate(`/rooms?destination=${encodeURIComponent(destination)}`);
+
+    navigate(
+      `/rooms?destination=${encodeURIComponent(
+        destination
+      )}&checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}`
+    );
   };
 
   return (
@@ -31,7 +61,11 @@ const HeroSection = () => {
         hotels and resorts. Start your journey today.
       </p>
 
-      <form onSubmit={handleSearch} className="bg-white text-gray-500 rounded-lg px-6 py-4 mt-8  flex flex-col md:flex-row max-md:items-start gap-4 max-md:mx-auto">
+      <form
+        onSubmit={handleSearch}
+        className="bg-white text-gray-500 rounded-lg px-6 py-4 mt-8  flex flex-col md:flex-row max-md:items-start gap-4 max-md:mx-auto"
+      >
+        {/* Destination */}
         <div>
           <div className="flex items-center gap-2">
             <img
@@ -58,11 +92,12 @@ const HeroSection = () => {
           </datalist>
         </div>
 
+        {/* Check-in */}
         <div>
           <div className="flex items-center gap-2">
             <img
               src={assets.calenderIcon}
-              alt="calender-icom"
+              alt="calender-icon"
               className="h-4"
             />
             <label htmlFor="checkIn">Check in</label>
@@ -70,15 +105,20 @@ const HeroSection = () => {
           <input
             id="checkIn"
             type="date"
+            value={checkIn}
+            min={today}
+            onChange={(e) => setCheckIn(e.target.value)}
             className=" rounded border border-gray-200 px-3 py-1.5 mt-1.5 text-sm outline-none"
+            required
           />
         </div>
 
+        {/* Check-out */}
         <div>
           <div className="flex items-center gap-2">
             <img
               src={assets.calenderIcon}
-              alt="calender-icom"
+              alt="calender-icon"
               className="h-4"
             />
             <label htmlFor="checkOut">Check out</label>
@@ -86,10 +126,15 @@ const HeroSection = () => {
           <input
             id="checkOut"
             type="date"
+            value={checkOut}
+            min={checkIn || today}
+            onChange={(e) => setCheckOut(e.target.value)}
             className=" rounded border border-gray-200 px-3 py-1.5 mt-1.5 text-sm outline-none"
+            required
           />
         </div>
 
+        {/* Guests */}
         <div className="flex md:flex-col max-md:gap-2 max-md:items-center">
           <label htmlFor="guests">Guests</label>
           <input
@@ -97,12 +142,16 @@ const HeroSection = () => {
             max={4}
             id="guests"
             type="number"
+            value={guests}
+            onChange={(e) => setGuests(e.target.value)}
             className=" rounded border border-gray-200 px-3 py-1.5 mt-1.5 text-sm outline-none  max-w-16"
-            placeholder="0"
           />
         </div>
 
-        <button type="submit" className="flex items-center justify-center gap-1 rounded-md bg-black py-3 px-4 text-white my-auto cursor-pointer max-md:w-full max-md:py-1">
+        <button
+          type="submit"
+          className="flex items-center justify-center gap-1 rounded-md bg-black py-3 px-4 text-white my-auto cursor-pointer max-md:w-full max-md:py-1"
+        >
           <img src={assets.searchIcon} alt="search-icon" className="h-7" />
           <span>Search</span>
         </button>

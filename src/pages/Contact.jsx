@@ -4,15 +4,13 @@ import { assets } from "../assets/assets";
 const ContactUs = () => {
   return (
     <div className="bg-gray-50 text-gray-800 mt-8">
-
       {/* Hero Section */}
-      <div className="relative h-[60vh] flex items-center justify-center bg-[url('/src/assets/heroImage.png')] bg-cover bg-center">
-        <div className="absolute inset-0 bg-black/60"></div>
-        <div className="relative z-10 text-center text-white px-6">
+      <div className="relative h-[40vh] flex items-center justify-center">
+        <div className="relative z-10 text-center text-black px-6">
           <h1 className="font-playfair text-4xl md:text-6xl font-bold">
             Contact QuickStay
           </h1>
-          <p className="mt-4 max-w-2xl mx-auto text-gray-200">
+          <p className="mt-4 max-w-2xl mx-auto text-gray-800">
             We’re here to help you plan your perfect stay. Reach out anytime.
           </p>
         </div>
@@ -20,7 +18,6 @@ const ContactUs = () => {
 
       {/* Contact Info Section */}
       <section className="max-w-6xl mx-auto px-6 md:px-16 py-16 grid md:grid-cols-2 gap-12">
-        
         {/* Left Info */}
         <div>
           <h2 className="text-3xl font-bold font-playfair mb-4">
@@ -50,10 +47,26 @@ const ContactUs = () => {
 
           {/* Social Icons */}
           <div className="flex gap-4 mt-8">
-            <img src={assets.instagramIcon} alt="" className="h-6 cursor-pointer" />
-            <img src={assets.facebookIcon} alt="" className="h-6 cursor-pointer" />
-            <img src={assets.twitterIcon} alt="" className="h-6 cursor-pointer" />
-            <img src={assets.linkendinIcon} alt="" className="h-6 cursor-pointer" />
+            <img
+              src={assets.instagramIcon}
+              alt=""
+              className="h-6 cursor-pointer"
+            />
+            <img
+              src={assets.facebookIcon}
+              alt=""
+              className="h-6 cursor-pointer"
+            />
+            <img
+              src={assets.twitterIcon}
+              alt=""
+              className="h-6 cursor-pointer"
+            />
+            <img
+              src={assets.linkendinIcon}
+              alt=""
+              className="h-6 cursor-pointer"
+            />
           </div>
         </div>
 

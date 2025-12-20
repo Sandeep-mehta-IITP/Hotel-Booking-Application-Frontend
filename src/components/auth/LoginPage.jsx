@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../../utils/Validation/loginSchema";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../APP/Slices/authSlice";
 import Input from "../ui/Input";
@@ -13,15 +13,12 @@ import Title from "../Title";
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { loading, isAuthenticated } = useSelector(({ auth }) => auth);
+  const redirectPath = location.state?.from || "/";
 
   const [showPass, setShowPass] = useState(false);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/");
-    }
-  }, [isAuthenticated]);
 
   const {
     register,
@@ -42,7 +39,7 @@ const LoginPage = () => {
 
     if (loginUser.fulfilled.match(response)) {
       reset();
-      navigate("/");
+      navigate(redirectPath, { replace: true });
     }
   };
 

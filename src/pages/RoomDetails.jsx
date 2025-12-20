@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { assets, facilityIcons, roomCommonData } from "../assets/assets";
 import StarRating from "../components/StarRating";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,11 +16,14 @@ const RoomDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
 
   const [room, setRoom] = useState(null);
   const [mainImage, setMainImage] = useState(null);
   const { rooms, loading: roomsLoading } = useSelector((state) => state.room);
   const { loading: bookingLoading } = useSelector((state) => state.booking);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
@@ -67,7 +70,23 @@ const RoomDetails = () => {
 
     if (!isAvailable) {
       return checkAvailability();
-    } else {
+    }
+
+    // 🔐 AUTH GUARD
+    if (!isAuthenticated) {
+      toast.error("Please login to continue booking");
+
+      navigate("/login", {
+        state: {
+          from: location.pathname,
+        },
+        replace: true,
+      });
+
+      return;
+    }
+
+    try {
       await dispatch(
         createBooking({
           room: id,
@@ -81,6 +100,8 @@ const RoomDetails = () => {
       toast.success("Booking confirmed 🎉");
       navigate("/my-bookings");
       window.scrollTo(0, 0);
+    } catch (error) {
+      toast.error(error?.message || "Booking failed");
     }
   };
 

@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import StarRating from "../components/StarRating";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRooms } from "../APP/Slices/roomSlice";
+import AllRoomsPageSkeleton from "../components/ui/AllRoomsPageSkeleton";
 
 const CheckBox = ({ label, selected = false, onChange = () => {} }) => {
   return (
@@ -46,6 +47,7 @@ const AllRooms = () => {
   const dispatch = useDispatch();
   const { rooms, loading, error } = useSelector((state) => state.room);
   //console.log("rooms data", rooms);
+  
 
   useEffect(() => {
     dispatch(fetchRooms());
@@ -154,6 +156,10 @@ const AllRooms = () => {
     setSelectSort("");
     setSearchParams({});
   };
+
+  if (loading) {
+    return <AllRoomsPageSkeleton />
+  }
 
   return (
     <div className="flex flex-col-reverse lg:flex-row items-start justify-between pt-28 md:pt-36 px-4 md:px-16 lg:px-24">

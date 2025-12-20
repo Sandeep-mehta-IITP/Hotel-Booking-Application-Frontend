@@ -10,6 +10,7 @@ import {
   createBooking,
   resetAvailability,
 } from "../APP/Slices/bookingSlice";
+import RoomDetailsSkeleton from "../components/ui/RoomDetailsSkeleton";
 
 const RoomDetails = () => {
   const { id } = useParams();
@@ -18,7 +19,7 @@ const RoomDetails = () => {
 
   const [room, setRoom] = useState(null);
   const [mainImage, setMainImage] = useState(null);
-  const { rooms } = useSelector((state) => state.room);
+  const { rooms, loading: roomsLoading } = useSelector((state) => state.room);
   const { loading: bookingLoading } = useSelector((state) => state.booking);
 
   const [checkInDate, setCheckInDate] = useState(null);
@@ -103,6 +104,10 @@ const RoomDetails = () => {
     setIsAvailable(false);
     dispatch(resetAvailability());
   }, [checkInDate, checkOutDate]);
+
+  if (roomsLoading || !room) {
+    return <RoomDetailsSkeleton />;
+  }
 
   return (
     room && (
@@ -302,7 +307,10 @@ const RoomDetails = () => {
             </div>
           </div>
 
-          <button className="px-6 py-2.5 mt-4 rounded text-white bg-primary hover:bg-primary-dull transition-all cursor-pointer">
+          <button
+            onClick={() => navigate("/contact-us")}
+            className="px-6 py-2.5 mt-4 rounded text-white bg-primary hover:bg-primary-dull transition-all cursor-pointer"
+          >
             Contact Now
           </button>
         </div>

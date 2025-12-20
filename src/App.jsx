@@ -27,6 +27,7 @@ import LoginPage from "./components/auth/LoginPage";
 import SignupPage from "./components/auth/SignupPage";
 import { getCurrentUser } from "./APP/Slices/authSlice";
 import { healthCheck } from "./APP/Slices/healthCheckSlice";
+import ScrollToTop from "./components/ui/ScrollToTop";
 
 function App() {
   const isOwnerPath = useLocation().pathname.includes("owner");
@@ -35,40 +36,33 @@ function App() {
   const dispatch = useDispatch();
 
   const [initialLoading, setInitialLoading] = useState(false);
-  const hasInitialized = useRef(false); // Ref to track if init has run, survives re-renders but resets on unmount
+  const hasInitialized = useRef(false);
 
   useEffect(() => {
-    // Double-check with ref to prevent any double-run (e.g., StrictMode)
+   
     if (hasInitialized.current) {
-      console.log("Init already done, skipping"); // Debug
-      setInitialLoading(true); // Ensure it's true if somehow state lost
+      setInitialLoading(true);
       return;
     }
-
-    console.log("Starting app init (should only log once per full reload)"); // Debug: Remove in prod
-
     hasInitialized.current = true;
-
-    const initPromises = dispatch(healthCheck()).then(() => {
+    dispatch(healthCheck()).then(() => {
       return dispatch(getCurrentUser());
     }).then(() => {
-      console.log("App init complete, setting loading to true"); // Debug
       setInitialLoading(true);
     }).catch((error) => {
-      console.error("App init failed:", error); // Handle errors, but still show app
-      setInitialLoading(true); // Don't block on error
+      console.error("App init failed:", error);
+      setInitialLoading(true);
     });
 
     // Interval for healthCheck every 5 min
     const intervalId = setInterval(() => {
-      dispatch(healthCheck()).catch(console.error); // Silent fail
+      dispatch(healthCheck()).catch(console.error);
     }, 5 * 60 * 1000);
 
     return () => {
       clearInterval(intervalId);
-      console.log("App unmounting, cleaning up"); // Debug: If this logs on navigation, App is remounting!
     };
-  }, []); // Empty deps: Mount only
+  }, []);
 
   // If still loading, show splash (but with ref, it should be bulletproof)
   if (!initialLoading) {
@@ -90,6 +84,7 @@ function App() {
 
   return (
     <div>
+      <ScrollToTop />
       <Toaster
         position="top-right"
         autoClose={3000}

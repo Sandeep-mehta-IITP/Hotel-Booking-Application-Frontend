@@ -38,7 +38,7 @@ const AboutUs = () => {
         <img
           src={assets.regImage}
           alt="About QuickStay"
-          className="rounded-xl shadow-lg"
+          className="w-xl h-96 rounded-xl object-cover shadow-lg"
         />
       </div>
 

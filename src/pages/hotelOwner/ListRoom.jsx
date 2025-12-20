@@ -11,7 +11,8 @@ const ListRoom = () => {
   const [rooms, setRooms] = useState([]);
 
   const dispatch = useDispatch();
-  const {userData, isAuthenticated} = useSelector((state) => state?.auth);
+  const { userData, isAuthenticated } = useSelector((state) => state?.auth);
+  const { loading } = useSelector((state) => state.room);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -19,7 +20,7 @@ const ListRoom = () => {
         .unwrap()
         .then((res) => {
           //console.log("res", res);
-          setRooms(res);
+          setRooms(res || []);
         });
     }
   }, [isAuthenticated, userData]);
@@ -35,6 +36,23 @@ const ListRoom = () => {
         );
       });
   };
+
+  const SkeletonRow = () => (
+    <tr className="animate-pulse">
+      <td className="py-3 px-4 border-t">
+        <div className="h-4 bg-gray-300 rounded w-24"></div>
+      </td>
+      <td className="py-3 px-4 border-t max-sm:hidden">
+        <div className="h-4 bg-gray-300 rounded w-40"></div>
+      </td>
+      <td className="py-3 px-4 border-t">
+        <div className="h-4 bg-gray-300 rounded w-16"></div>
+      </td>
+      <td className="py-3 px-4 border-t text-center">
+        <div className="h-6 bg-gray-300 rounded-full w-12 mx-auto"></div>
+      </td>
+    </tr>
+  );
 
   return (
     <div>
@@ -62,34 +80,48 @@ const ListRoom = () => {
             </tr>
           </thead>
           <tbody className="text-sm">
-            {rooms.map((room, index) => (
-              <tr key={index}>
-                <td className="py-3 px-4 text-gray-700 border-t border-r-gray-300">
-                  {room.roomType}
-                </td>
-                
-                <td className="py-3 px-4 text-gray-700 border-t border-r-gray-300 max-sm:hidden">
-                  {room.amenities.join(", ")}
-                </td>
+            {/* 🔄 Loading Skeleton */}
+            {loading &&
+              Array.from({ length: 4 }).map((_, i) => <SkeletonRow key={i} />)}
 
-                <td className="py-3 px-4 text-gray-700 border-t border-r-gray-300">
-                 {import.meta.env.VITE_CURRENCY} {room.pricePerNight}
-                </td>
-
-                <td className="py-3 px-4 text-sm text-red-500 border-t border-r-gray-300 text-center">
-                  <label className="relative inline-flex items-center cursor-pointer text-gray-900 gap-3">
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      checked={room.isAvailable}
-                      onChange={() => toggleAvailability(room?._id)}
-                    />
-                    <div className="w-12 h-7 bg-slate-300 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-200"></div>
-                    <span className="dot absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-5"></span>
-                  </label>
+            {/* 📭 Empty State */}
+            {!loading && rooms.length === 0 && (
+              <tr>
+                <td colSpan="4" className="py-10 text-center text-gray-500">
+                  No rooms found. Add your first room 🏨
                 </td>
               </tr>
-            ))}
+            )}
+
+            {!loading &&
+              rooms.map((room, index) => (
+                <tr key={index}>
+                  <td className="py-3 px-4 text-gray-700 border-t border-r-gray-300">
+                    {room.roomType}
+                  </td>
+
+                  <td className="py-3 px-4 text-gray-700 border-t border-r-gray-300 max-sm:hidden">
+                    {room.amenities.join(", ")}
+                  </td>
+
+                  <td className="py-3 px-4 text-gray-700 border-t border-r-gray-300">
+                    {import.meta.env.VITE_CURRENCY} {room.pricePerNight}
+                  </td>
+
+                  <td className="py-3 px-4 text-sm text-red-500 border-t border-r-gray-300 text-center">
+                    <label className="relative inline-flex items-center cursor-pointer text-gray-900 gap-3">
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={room.isAvailable}
+                        onChange={() => toggleAvailability(room?._id)}
+                      />
+                      <div className="w-12 h-7 bg-slate-300 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-200"></div>
+                      <span className="dot absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-5"></span>
+                    </label>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

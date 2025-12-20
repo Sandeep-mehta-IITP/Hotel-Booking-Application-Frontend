@@ -15,18 +15,20 @@ const Loader = () => {
   }, [nextUrl]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-white via-[#f6f7f9] to-white px-4">
-      <div className="flex flex-col items-center justify-center text-center w-full max-w-md gap-8 py-12 min-h-[60vh]">
-        <div className="relative flex-shrink-0 mb-6">
-          <div className="absolute -inset-2 rounded-full blur-xl bg-sky-400/20 animate-pulse" />
-          <Loader className="relative w-10 h-10 sm:w-12 sm:h-12 animate-spin text-sky-600 flex-shrink-0" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-white">
+        <div className="flex flex-col items-center gap-6 px-6 py-8 rounded-2xl bg-white shadow-xl border border-gray-100">
+          {/* Spinner with soft glow */}
+          <div className="relative">
+            <div className="absolute inset-0 rounded-full blur-xl bg-blue-500/20" />
+            <Loader2 className="relative w-12 h-12 animate-spin text-blue-600" />
+          </div>
+
+          {/* Title */}
+          <p className="text-sm font-medium text-gray-700 tracking-wide">
+            Please wait...
+          </p>
         </div>
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-gray-900 leading-tight px-4">
-          Restoring your session...
-        </h1>
-        <div className="w-24 h-[3px] bg-gradient-to-r from-sky-500 to-pink-500 rounded-full mx-auto" />
       </div>
-    </div>
   );
 };
 

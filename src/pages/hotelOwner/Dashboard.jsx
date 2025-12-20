@@ -6,7 +6,7 @@ import { fetchHotelBookings } from "../../APP/Slices/bookingSlice";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.ui.user);
+  const { isAuthenticated} = useSelector((state) => state?.auth);
 
   const [dashboardData, setDashboardData] = useState({
     bookings: [],
@@ -15,15 +15,15 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-      if (user) {
+      if (isAuthenticated) {
         dispatch(fetchHotelBookings())
           .unwrap()
           .then((res) => {
-            // console.log("res", res);
+            //console.log("res", res);
             setDashboardData(res);
           });
       }
-    }, [user]);
+    }, [isAuthenticated]);
   
 
   return (

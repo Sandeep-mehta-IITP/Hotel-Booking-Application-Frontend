@@ -1,5 +1,6 @@
 import React from "react";
 import Title from "../components/Title";
+import { Link } from "react-router-dom";
 
 const CancellationOptions = () => {
   return (
@@ -96,12 +97,12 @@ const CancellationOptions = () => {
           specific policy displayed at the time of booking. Refund timelines
           depend on the payment method used.
         </p>
-        <a
-          href="/help-center"
+        <Link
+          to="/help-center"
           className="inline-block bg-black text-white px-6 py-3 rounded-md hover:opacity-90 transition"
         >
           Visit Help Center
-        </a>
+        </Link>
       </div>
     </div>
   );

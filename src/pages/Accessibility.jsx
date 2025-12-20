@@ -1,5 +1,6 @@
 import React from "react";
 import Title from "../components/Title";
+import { Link } from "react-router-dom";
 
 const Accessibility = () => {
   return (
@@ -86,12 +87,12 @@ const Accessibility = () => {
             If you experience any accessibility issues or have ideas on how we
             can improve, our support team is always here to help.
           </p>
-          <a
-            href="/contact-us"
+          <Link
+            to="/contact-us"
             className="inline-block bg-black text-white px-8 py-3 rounded-md hover:opacity-90 transition"
           >
             Contact Support
-          </a>
+          </Link>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import Title from "../components/Title";
 import { assets } from "../assets/assets";
+import { Link } from "react-router-dom";
 
 const Partners = () => {
   return (
@@ -34,12 +35,12 @@ const Partners = () => {
               List your property on QuickStay and reach thousands of travelers
               looking for verified and trusted accommodations.
             </p>
-            <a
-              href="/contact-us"
+            <Link
+              to="/contact-us"
               className="text-sm font-medium text-blue-600 hover:underline"
             >
               Become a Hotel Partner →
-            </a>
+            </Link>
           </div>
 
           <div className="border rounded-xl p-8 hover:shadow-xl transition">
@@ -50,12 +51,12 @@ const Partners = () => {
               Collaborate with us on co-branding, exclusive deals, and travel
               campaigns that create value for users.
             </p>
-            <a
-              href="/contact-us"
+            <Link
+              to="/contact-us"
               className="text-sm font-medium text-blue-600 hover:underline"
             >
               Partner with Us →
-            </a>
+            </Link>
           </div>
 
           <div className="border rounded-xl p-8 hover:shadow-xl transition">
@@ -66,12 +67,12 @@ const Partners = () => {
               Integrate your technology with QuickStay to power smarter
               bookings, payments, analytics, and customer experiences.
             </p>
-            <a
-              href="/contact-us"
+            <Link
+              to="/contact-us"
               className="text-sm font-medium text-blue-600 hover:underline"
             >
               Explore Integrations →
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -104,12 +105,12 @@ const Partners = () => {
             Whether you’re a hotel owner, brand, or technology provider, we’d
             love to explore partnership opportunities with you.
           </p>
-          <a
-            href="/contact-us"
+          <Link
+            to="/contact-us"
             className="inline-block bg-white text-black px-8 py-3 rounded-md font-medium hover:opacity-90 transition"
           >
             Become a Partner
-          </a>
+          </Link>
         </div>
       </div>
     </div>

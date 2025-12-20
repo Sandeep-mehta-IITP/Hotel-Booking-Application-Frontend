@@ -1,6 +1,7 @@
 import React from "react";
 import Title from "../components/Title";
 import { assets } from "../assets/assets";
+import { Link } from "react-router-dom";
 
 const HelpCenter = () => {
   return (
@@ -96,12 +97,12 @@ const HelpCenter = () => {
           If you can’t find the answer you’re looking for, our support team is
           just a click away.
         </p>
-        <a
-          href="/contact-us"
+        <Link
+          to="/contact-us"
           className="inline-block bg-black text-white px-6 py-3 rounded-md hover:opacity-90 transition"
         >
           Contact Support
-        </a>
+        </Link>
       </div>
     </div>
   );

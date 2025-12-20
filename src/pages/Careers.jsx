@@ -1,5 +1,6 @@
 import React from "react";
 import Title from "../components/Title";
+import { Link } from "react-router-dom";
 
 const Careers = () => {
   return (
@@ -133,12 +134,12 @@ const Careers = () => {
             Send us your resume or portfolio, and we’ll get in touch if there’s
             a fit.
           </p>
-          <a
-            href="/contact-us"
+          <Link
+            to="/contact-us"
             className="inline-block bg-white text-black px-8 py-3 rounded-md font-medium hover:opacity-90 transition"
           >
             Contact Careers Team
-          </a>
+          </Link>
         </div>
       </div>
     </div>

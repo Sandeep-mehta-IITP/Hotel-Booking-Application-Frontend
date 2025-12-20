@@ -1,5 +1,6 @@
 import React from "react";
 import { assets } from "../assets/assets";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -42,16 +43,16 @@ const Footer = () => {
           <p className="font-playfair text-lg text-gray-800">COMPANY</p>
           <ul className="mt-3 flex flex-col gap-2 text-sm">
             <li>
-              <a href="/about">About</a>
+              <Link to="/about">About</Link>
             </li>
             <li>
-              <a href="careers">Careers</a>
+              <Link to="careers">Careers</Link>
             </li>
             <li>
-              <a href="/press">Press</a>
+              <Link to="/press">Press</Link>
             </li>
             <li>
-              <a href="/partners">Partners</a>
+              <Link to="/partners">Partners</Link>
             </li>
           </ul>
         </div>
@@ -60,19 +61,19 @@ const Footer = () => {
           <p className="font-playfair text-lg text-gray-800">SUPPORT</p>
           <ul className="mt-3 flex flex-col gap-2 text-sm">
             <li>
-              <a href="/help-center">Help Center</a>
+              <Link to="/help-center">Help Center</Link>
             </li>
             <li>
-              <a href="/safety-info">Safety Information</a>
+              <Link to="/safety-info">Safety Information</Link>
             </li>
             <li>
-              <a href="cancellation-options">Cancellation Options</a>
+              <Link to="cancellation-options">Cancellation Options</Link>
             </li>
             <li>
-              <a href="/contact-us">Contact Us</a>
+              <Link to="/contact-us">Contact Us</Link>
             </li>
             <li>
-              <a href="/accessibility">Accessibility</a>
+              <Link to="/accessibility">Accessibility</Link>
             </li>
           </ul>
         </div>
@@ -99,13 +100,13 @@ const Footer = () => {
         <p>© {new Date().getFullYear()} QucikStay. All rights reserved.</p>
         <ul className="flex items-center gap-4">
           <li>
-            <a href="#">Privacy</a>
+            <Link to="#">Privacy</Link>
           </li>
           <li>
-            <a href="#">Terms</a>
+            <Link to="#">Terms</Link>
           </li>
           <li>
-            <a href="#">Sitemap</a>
+            <Link to="#">Sitemap</Link>
           </li>
         </ul>
       </div>

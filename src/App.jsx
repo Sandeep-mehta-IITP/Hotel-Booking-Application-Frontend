@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Navbar from "./components/Navbar";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
@@ -35,21 +35,42 @@ function App() {
   const dispatch = useDispatch();
 
   const [initialLoading, setInitialLoading] = useState(false);
+  const hasInitialized = useRef(false); // Ref to track if init has run, survives re-renders but resets on unmount
 
   useEffect(() => {
-    dispatch(healthCheck()).then(() => {
-      dispatch(getCurrentUser()).then(() => {
-        setInitialLoading(true);
-      });
+    // Double-check with ref to prevent any double-run (e.g., StrictMode)
+    if (hasInitialized.current) {
+      console.log("Init already done, skipping"); // Debug
+      setInitialLoading(true); // Ensure it's true if somehow state lost
+      return;
+    }
+
+    console.log("Starting app init (should only log once per full reload)"); // Debug: Remove in prod
+
+    hasInitialized.current = true;
+
+    const initPromises = dispatch(healthCheck()).then(() => {
+      return dispatch(getCurrentUser());
+    }).then(() => {
+      console.log("App init complete, setting loading to true"); // Debug
+      setInitialLoading(true);
+    }).catch((error) => {
+      console.error("App init failed:", error); // Handle errors, but still show app
+      setInitialLoading(true); // Don't block on error
     });
 
-    const Interval = setInterval(() => {
-      dispatch(healthCheck());
+    // Interval for healthCheck every 5 min
+    const intervalId = setInterval(() => {
+      dispatch(healthCheck()).catch(console.error); // Silent fail
     }, 5 * 60 * 1000);
 
-    return () => clearInterval(Interval);
-  }, [dispatch]);
+    return () => {
+      clearInterval(intervalId);
+      console.log("App unmounting, cleaning up"); // Debug: If this logs on navigation, App is remounting!
+    };
+  }, []); // Empty deps: Mount only
 
+  // If still loading, show splash (but with ref, it should be bulletproof)
   if (!initialLoading) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-white via-[#f6f7f9] to-white px-4">
@@ -80,7 +101,7 @@ function App() {
         draggable
         pauseOnHover
         theme="dark"
-        transition:Bounce
+       
       />
       {!isOwnerPath && <Navbar />}
       {showHotelReg && <HotelReg />}
@@ -106,7 +127,7 @@ function App() {
           <Route path="/my-bookings" element={<MyBookings />} />
           <Route path="/loader/:nextUrl" element={<Loader />} />
 
-          {/* Owenr Routes */}
+          {/* Owner Routes */}
           <Route path="/owner" element={<Layout />}>
             <Route index element={<Dashboard />} />
             <Route path="add-room" element={<AddRoom />} />

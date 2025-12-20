@@ -1,6 +1,7 @@
 import React from "react";
 import Title from "../components/Title";
 import { assets } from "../assets/assets";
+import { Link } from "react-router-dom";
 
 const SafetyInformation = () => {
   return (
@@ -90,12 +91,12 @@ const SafetyInformation = () => {
           If you face any safety concerns during booking or stay, please reach
           out to our support team right away.
         </p>
-        <a
-          href="/contact-us"
+        <Link
+          to="/contact-us"
           className="inline-block bg-black text-white px-6 py-3 rounded-md hover:opacity-90 transition"
         >
           Contact Support
-        </a>
+        </Link>
       </div>
     </div>
   );

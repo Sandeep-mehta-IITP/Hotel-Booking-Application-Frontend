@@ -1,5 +1,6 @@
 import React from "react";
 import Title from "../components/Title";
+import { Link } from "react-router-dom";
 
 const Press = () => {
   return (
@@ -109,12 +110,12 @@ const Press = () => {
             For press inquiries, interviews, or media requests, please reach out
             to our communications team.
           </p>
-          <a
-            href="/contact-us"
+          <Link
+            to="/contact-us"
             className="inline-block bg-white text-black px-8 py-3 rounded-md font-medium hover:opacity-90 transition"
           >
             Contact Press Team
-          </a>
+          </Link>
         </div>
       </div>
     </div>

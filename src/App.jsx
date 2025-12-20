@@ -28,6 +28,8 @@ import SignupPage from "./components/auth/SignupPage";
 import { getCurrentUser } from "./APP/Slices/authSlice";
 import { healthCheck } from "./APP/Slices/healthCheckSlice";
 import ScrollToTop from "./components/ui/ScrollToTop";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import OwnerRoute from "./components/auth/OwnerRoute";
 
 function App() {
   const isOwnerPath = useLocation().pathname.includes("owner");
@@ -39,20 +41,22 @@ function App() {
   const hasInitialized = useRef(false);
 
   useEffect(() => {
-   
     if (hasInitialized.current) {
       setInitialLoading(true);
       return;
     }
     hasInitialized.current = true;
-    dispatch(healthCheck()).then(() => {
-      return dispatch(getCurrentUser());
-    }).then(() => {
-      setInitialLoading(true);
-    }).catch((error) => {
-      console.error("App init failed:", error);
-      setInitialLoading(true);
-    });
+    dispatch(healthCheck())
+      .then(() => {
+        return dispatch(getCurrentUser());
+      })
+      .then(() => {
+        setInitialLoading(true);
+      })
+      .catch((error) => {
+        console.error("App init failed:", error);
+        setInitialLoading(true);
+      });
 
     // Interval for healthCheck every 5 min
     const intervalId = setInterval(() => {
@@ -96,15 +100,15 @@ function App() {
         draggable
         pauseOnHover
         theme="dark"
-       
       />
       {!isOwnerPath && <Navbar />}
       {showHotelReg && <HotelReg />}
       <div className="min-h-[70vh]">
         <Routes>
-          <Route path="/signup" element={<SignupPage />} />
+          {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/help-center" element={<HelpCenter />} />
@@ -119,11 +123,26 @@ function App() {
           <Route path="/partners" element={<Partners />} />
           <Route path="/rooms" element={<AllRooms />} />
           <Route path="/rooms/:id" element={<RoomDetails />} />
-          <Route path="/my-bookings" element={<MyBookings />} />
-          <Route path="/loader/:nextUrl" element={<Loader />} />
 
-          {/* Owner Routes */}
-          <Route path="/owner" element={<Layout />}>
+          {/* User Protected */}
+          <Route
+            path="/my-bookings"
+            element={
+              <ProtectedRoute>
+                <MyBookings />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Owner Protected */}
+          <Route
+            path="/owner"
+            element={
+              <OwnerRoute>
+                <Layout />
+              </OwnerRoute>
+            }
+          >
             <Route index element={<Dashboard />} />
             <Route path="add-room" element={<AddRoom />} />
             <Route path="list-room" element={<ListRoom />} />

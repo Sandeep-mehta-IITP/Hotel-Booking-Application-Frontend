@@ -117,6 +117,7 @@ function App() {
             path="/cancellation-options"
             element={<CancellationOptions />}
           />
+          <Route path="/loader/:nextUrl" element={<Loader />} />
           <Route path="/accessibility" element={<Accessibility />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/press" element={<Press />} />

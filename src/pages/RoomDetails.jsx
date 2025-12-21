@@ -105,6 +105,8 @@ const RoomDetails = () => {
     }
   };
 
+  console.log("room", room);
+
   // Fetch rooms if not present (on refresh)
   useEffect(() => {
     if (!rooms.length) {
@@ -129,6 +131,9 @@ const RoomDetails = () => {
   if (roomsLoading || !room) {
     return <RoomDetailsSkeleton />;
   }
+
+  
+  
 
   return (
     room && (
